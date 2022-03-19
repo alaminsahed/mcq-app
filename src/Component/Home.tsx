@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Input,
   InputLabel,
@@ -7,9 +7,10 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import { makeStyles } from "@mui/styles";
-import { Label } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import data from "../db/data";
 
 export const useStyles = makeStyles({
   headerText: {
@@ -41,8 +42,19 @@ export const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles();
+  const [lan, setLan] = useState("");
+  const navigate = useNavigate();
+
+  const submitHandler = () => {
+    data.forEach((ques: any) => {
+      if (ques.language === lan) {
+        navigate("question/1");
+      }
+    });
+  };
+
   return (
-    <Card className={classes.card}>
+    <Card className={classes.card} onSubmit={submitHandler}>
       <CardContent style={{ backgroundColor: "#b39ddb" }}>
         <h1 className={classes.headerText}>MCQ APP</h1>
         <form>
@@ -74,7 +86,9 @@ const Home = () => {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             label="language"
+            value={lan}
             className={classes.input}
+            onChange={(e) => setLan(e.target.value)}
             required
           >
             <MenuItem value="english">English</MenuItem>
